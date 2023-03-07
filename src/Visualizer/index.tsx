@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
   AppShell,
   Button,
@@ -10,9 +11,9 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { ReactFlowProvider } from 'reactflow';
-import { DatabaseConfig } from 'types';
 import Flow from './Flow';
 import { loadDatabases } from './helpers/loadDatabases';
+import { DatabaseConfig } from './types';
 
 interface VisualizerProps {
   // eslint-disable-next-line react/require-default-props
@@ -42,9 +43,7 @@ function Visualizer(props: VisualizerProps) {
         setDatabasesLoaded(true);
         return 's';
       })
-      .catch(() => {
-        console.log('error');
-      });
+      .catch(() => {});
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const theme = useMantineTheme();

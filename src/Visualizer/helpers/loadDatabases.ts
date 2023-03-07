@@ -6,7 +6,7 @@ import {
   TablePositions,
   DatabaseConfigs,
 } from '../types';
-import { fullTableName } from './fullTableName';
+import { fullTableName } from './ui-helpers';
 
 export const loadDatabaseConfig = async (databaseName: string) => {
   const edgeConfigs = (

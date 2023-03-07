@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { nodeTypes } from 'config/nodeTypes';
 import { useCallback, useState } from 'react';
 import ReactFlow, {
@@ -15,22 +16,14 @@ import ReactFlow, {
   getOutgoers,
   ReactFlowInstance,
 } from 'reactflow';
-import { InfoIcon, InfoPopup, Markers } from './components';
 
-import {
-  initializeNodes,
-  moveSVGInFront,
-  setHighlightEdgeClassName,
-  logTablePositions,
-} from './helpers';
+import { initializeNodes } from './helpers';
 
 import { EdgeConfig, DatabaseConfig } from './types';
 
 // this is important! You need to import the styles from the lib to make it work
 import 'reactflow/dist/style.css';
 import './Style';
-import DatabaseIcon from './components/DatabaseIcon';
-import { DatabaseMenuPopup } from './components/DatabaseMenuPopup';
 import {
   calculateEdges,
   calculateSourcePosition,
@@ -40,7 +33,10 @@ import {
   edgeClassName,
   edgeMarkerName,
   setEdgeClassName,
+  setHighlightEdgeClassName,
 } from './helpers/edge-helpers';
+import { logTablePositions, moveSVGInFront } from './helpers/ui-helpers';
+import Markers from './components/Markers';
 
 interface FlowProps {
   currentDatabase: DatabaseConfig;
@@ -60,14 +56,12 @@ function Flow(props: FlowProps) {
 
   const onInit = (instance: ReactFlowInstance) => {
     const noder = instance.getNodes();
-    console.log({ noder });
     const initialEdges = calculateEdges(noder, currentDatabase);
     setEdges(() => initialEdges);
 
     const handleKeyboard = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.key === 'p') {
         const nodez = instance.getNodes();
-
         logTablePositions(nodez);
       }
     };
@@ -75,7 +69,7 @@ function Flow(props: FlowProps) {
     document.addEventListener('keydown', handleKeyboard);
 
     // https://javascriptf1.com/snippet/detect-fullscreen-mode-with-javascript
-    window.addEventListener('resize', (event) => {
+    window.addEventListener('resize', () => {
       setFullScreen(window.innerHeight === window.screen.height);
     });
 
@@ -327,50 +321,9 @@ function Flow(props: FlowProps) {
         onNodeMouseLeave={onNodeMouseLeave}
         onSelectionChange={onSelectionChange}
       >
-        <Controls showInteractive={false}>
-          <ControlButton
-            onClick={() => {
-              setInfoPopupOn(!infoPopupOn);
-            }}
-            className="into-popup-toggle"
-          >
-            <InfoIcon />
-          </ControlButton>
-          <ControlButton
-            onClick={() => {
-              setDatabaseMenuPopupOn(true);
-            }}
-            className="into-popup-toggle"
-          >
-            <DatabaseIcon />
-          </ControlButton>
-        </Controls>
+        <Controls showInteractive={false} showZoom={false} />
         <Background color="#ffffff" gap={16} />
       </ReactFlow>
-      {infoPopupOn && (
-        <InfoPopup
-          onClose={() => {
-            setInfoPopupOn(false);
-          }}
-        />
-      )}
-      {unknownDatasetOn && (
-        <DatabaseMenuPopup
-          headline="Unknown dataset :warning:"
-          subheadline="Available datasets :point_down:"
-          onClose={() => {
-            setUnknownDatasetOn(false);
-          }}
-        />
-      )}
-      {databaseMenuPopupOn && (
-        <DatabaseMenuPopup
-          headline="Choose a dataset :point_down:"
-          onClose={() => {
-            setDatabaseMenuPopupOn(false);
-          }}
-        />
-      )}
     </div>
   );
 }
