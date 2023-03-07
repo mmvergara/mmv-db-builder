@@ -1,11 +1,38 @@
 import { Edge, Node } from 'reactflow';
 import { edgeMarkerName } from './edgeMarkerName';
 import { edgeClassName } from './edgeClassName';
-import { calculateSourcePosition } from './calculateSourcePosition';
-import { calculateTargetPosition } from './calculateTargetPosition';
 import { DatabaseConfig, EdgeConfig } from '../types';
 
-function calculateEdges(nodes: Node[], currentDatabase: DatabaseConfig) {
+export const calculateSourcePosition = (
+  sourceNodeWidth: number,
+  sourceNodeX: number,
+  targetNodeWidth: number,
+  targetNodeX: number
+): string => {
+  const leftBoundary = targetNodeX + targetNodeWidth;
+  const rightBoundary = targetNodeX;
+  if (sourceNodeX > leftBoundary) return 'left';
+  if (sourceNodeX + sourceNodeWidth < rightBoundary) return 'right';
+  return 'left';
+};
+
+export const calculateTargetPosition = (
+  sourceNodeWidth: number,
+  sourceNodeX: number,
+  targetNodeWidth: number,
+  targetNodeX: number
+): string => {
+  const leftBoundary = targetNodeX;
+  const rightBoundary = targetNodeX + targetNodeWidth;
+  if (sourceNodeX + sourceNodeWidth < leftBoundary) return 'left';
+  if (sourceNodeX > rightBoundary) return 'right';
+  return 'left';
+};
+
+export const calculateEdges = (
+  nodes: Node[],
+  currentDatabase: DatabaseConfig
+) => {
   const initialEdges: Edge[] = [];
   currentDatabase.edgeConfigs.forEach((edgeConfig: EdgeConfig) => {
     const sourceNode = nodes.find(
@@ -50,6 +77,4 @@ function calculateEdges(nodes: Node[], currentDatabase: DatabaseConfig) {
   });
 
   return initialEdges;
-}
-
-export default calculateEdges;
+};
