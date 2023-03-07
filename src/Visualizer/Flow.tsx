@@ -15,8 +15,6 @@ import ReactFlow, {
   ReactFlowInstance,
 } from 'reactflow';
 
-import { initializeNodes } from './helpers';
-
 import { EdgeConfig, DatabaseConfig } from './types';
 
 // this is important! You need to import the styles from the lib to make it work
@@ -35,6 +33,7 @@ import {
 } from './helpers/edge-helpers';
 import { moveSVGInFront } from './helpers/ui-helpers';
 import Markers from './components/Markers';
+import { initializeNodes } from './helpers/initializeNodes';
 
 interface FlowProps {
   currentDatabase: DatabaseConfig;
