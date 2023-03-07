@@ -1,5 +1,4 @@
 import twemoji from 'twemoji';
-
 import MarkdownIt from 'markdown-it';
 import Token from 'markdown-it/lib/token';
 import markdownitEmoji from 'markdown-it-emoji';
@@ -20,8 +19,20 @@ md.renderer.rules.emoji = (token: Token, idx: Number) => {
   });
 };
 
-// @ts-ignore
 export const markdown = (text: string) => {
   return md.renderInline(text);
 };
-export const zzzd = '';
+
+// An SVG z-index hack to move selected edge on top of other edges.
+export const moveSVGInFront = (element?: Element | null) => {
+  if (!element) return;
+  const svg = element.closest('svg');
+  svg?.appendChild(element);
+};
+
+export const fullTableName = (tableName: string, schemaName = 'public') => {
+  if (tableName.includes('.')) {
+    return tableName;
+  }
+  return `${schemaName}.${tableName}`;
+};

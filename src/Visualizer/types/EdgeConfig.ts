@@ -3,7 +3,7 @@ export interface EdgeConfig {
   sourceKey: string;
   target: string;
   targetKey: string;
-  relation: string;
+  relation: 'hasMany' | 'hasOne';
   sourcePosition?: string;
   targetPosition?: string;
-};
+}

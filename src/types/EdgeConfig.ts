@@ -6,4 +6,4 @@ export interface EdgeConfig {
   relation: string;
   sourcePosition?: string;
   targetPosition?: string;
-};
+}

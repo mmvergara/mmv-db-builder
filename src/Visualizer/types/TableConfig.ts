@@ -1,4 +1,4 @@
-import { TableColumnConfig } from "./TableColumnConfig";
+import { TableColumnConfig } from './TableColumnConfig';
 
 export interface TableConfig {
   schema?: string;

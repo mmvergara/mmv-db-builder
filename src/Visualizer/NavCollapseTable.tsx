@@ -1,11 +1,7 @@
 import { useDisclosure } from '@mantine/hooks';
 import { Box, Button, Collapse, Group, Text } from '@mantine/core';
 
-interface NavCollapseTableProps {
-  props: {};
-}
-
-function NavCollapseTable({ props }: NavCollapseTableProps) {
+function NavCollapseTable() {
   const [opened, { toggle }] = useDisclosure(false);
   return (
     <Box maw={400} mx="auto">
