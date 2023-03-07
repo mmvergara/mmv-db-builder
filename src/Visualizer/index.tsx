@@ -17,7 +17,26 @@ import ReactFlow, {
   getOutgoers,
   ReactFlowInstance,
 } from 'reactflow';
-
+import {
+  AppShell,
+  Navbar,
+  Header,
+  Footer,
+  Aside,
+  Text,
+  MediaQuery,
+  Burger,
+  useMantineTheme,
+  Button,
+  Group,
+  Collapse,
+  Box,
+  Drawer,
+  Divider,
+  Paper,
+  Flex,
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import {
   MaximizeIcon,
   MinimizeIcon,
@@ -47,6 +66,7 @@ import './Style';
 import DatabaseIcon from './components/DatabaseIcon';
 import { DatabaseMenuPopup } from './components/DatabaseMenuPopup';
 import calculateEdges from './helpers/calculateEdges';
+import NavCollapseTable from './NavCollapseTable';
 
 interface FlowProps {
   currentDatabase: DatabaseConfig;
@@ -322,7 +342,7 @@ function Flow(props: FlowProps) {
 
   // https://stackoverflow.com/questions/16664584/changing-an-svg-markers-color-css
   return (
-    <div className="Flow" style={{ height: '95vh' }}>
+    <div className="Flow" style={{ height: '93vh' }}>
       <Markers />
       <ReactFlow
         nodes={nodes}
@@ -332,7 +352,7 @@ function Flow(props: FlowProps) {
         onInit={onInit}
         snapToGrid
         fitView
-        snapGrid={[16, 16]}
+        snapGrid={[4, 4]}
         nodeTypes={nodeTypes}
         onNodeMouseEnter={onNodeMouseEnter}
         onNodeMouseLeave={onNodeMouseLeave}
@@ -356,7 +376,7 @@ function Flow(props: FlowProps) {
             <DatabaseIcon />
           </ControlButton>
         </Controls>
-        <Background color="#aaa" gap={16} />
+        <Background color="#ffffff" gap={16} />
       </ReactFlow>
       {infoPopupOn && (
         <InfoPopup
@@ -395,6 +415,7 @@ function Visualizer(props: VisualizerProps) {
     schemaColors: {},
     tablePositions: {},
   } as DatabaseConfig);
+
   const [databasesLoaded, setDatabasesLoaded] = useState(false);
   const { database } = props;
   useEffect(() => {
@@ -412,10 +433,72 @@ function Visualizer(props: VisualizerProps) {
         console.log('error');
       });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const theme = useMantineTheme();
+  const [opened, setOpened] = useState(false);
+  const [drawerOpened, { open: drawerOpen, close: drawerClose }] =
+    useDisclosure(false);
   return (
-    <ReactFlowProvider>
-      {databasesLoaded && <Flow currentDatabase={currentDatabase} />}
-    </ReactFlowProvider>
+    <AppShell
+      header={
+        <Header
+          withBorder={false}
+          height={{ base: 61 }}
+          p="md"
+          bg="#38235c"
+          style={{ boxShadow: '0px 1px 5px gray' }}
+        >
+          <Flex
+            style={{
+              alignItems: 'center',
+              height: '100%',
+              gap: '20px',
+            }}
+          >
+            <Button onClick={drawerOpen}>Show Controls</Button>
+            <Button onClick={drawerOpen} variant="light">
+              Export Database
+            </Button>
+          </Flex>
+        </Header>
+      }
+    >
+      <Drawer
+        size={320}
+        opened={drawerOpened}
+        withOverlay={false}
+        onClose={drawerClose}
+        withCloseButton={false}
+        padding={0}
+        shadow="sm"
+      >
+        <Drawer.Body m={0} bg="#673ab2" h="100%">
+          <Flex bg="#38235c" p="sm" justify="space-between">
+            <Button color="teal" variant="filled" onClick={drawerClose}>
+              👑 Create Table
+            </Button>{' '}
+            <Button color="red" onClick={drawerClose}>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 16L0 8L8 0L9.425 1.4L3.825 7H16V9H3.825L9.425 14.6L8 16Z"
+                  fill="#ffffff"
+                />
+              </svg>
+            </Button>
+          </Flex>
+          <Divider />
+        </Drawer.Body>
+      </Drawer>
+      <ReactFlowProvider>
+        {databasesLoaded && <Flow currentDatabase={currentDatabase} />}
+      </ReactFlowProvider>
+    </AppShell>
   );
 }
 

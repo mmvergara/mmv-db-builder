@@ -16,7 +16,7 @@
   }
 
   &__type {
-    color: #BBB;
+    color: #bbb;
   }
 
   &__description {
@@ -29,11 +29,11 @@
     padding: 8px;
     z-index: 1000;
 
-    border: 1px solid #CBD2D9;
+    border: 1px solid #cbd2d9;
 
     border-radius: 4px;
 
-    background-color: #FFF;
+    background-color: #fff;
 
     &:before {
       position: absolute;
@@ -43,9 +43,9 @@
 
       border-width: 4px;
       border-style: solid;
-      border-color: transparent #CBD2D9 transparent transparent;
+      border-color: transparent #cbd2d9 transparent transparent;
 
-      content: "";
+      content: '';
     }
 
     &:after {
@@ -56,9 +56,9 @@
 
       border-width: 3px;
       border-style: solid;
-      border-color: transparent #FFF transparent transparent;
+      border-color: transparent #fff transparent transparent;
 
-      content: "";
+      content: '';
     }
 
     #{$root}--selected & {
@@ -69,8 +69,8 @@
   &__inner {
     display: flex;
     justify-content: space-between;
-    padding: 8px;
-
+    padding: 6px;
+    border-bottom: 1px solid #cbd2d9;
     position: relative;
   }
 
@@ -80,6 +80,6 @@
   }
 
   &:hover {
-    background-color: #EFEFEF;
+    background-color: #efefef;
   }
 }
