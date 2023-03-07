@@ -4,4 +4,4 @@ export interface TableColumnConfig {
   type: string;
   handleType?: string;
   key?: boolean;
-};
+}
