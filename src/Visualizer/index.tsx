@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { ReactFlowProvider } from 'reactflow';
 import { DatabaseConfig } from 'types';
 import Flow from './Flow';
-import { loadDatabases } from './helpers';
+import { loadDatabases } from './helpers/loadDatabases';
 
 interface VisualizerProps {
   // eslint-disable-next-line react/require-default-props

@@ -18,13 +18,10 @@ import ReactFlow, {
 import { InfoIcon, InfoPopup, Markers } from './components';
 
 import {
-  edgeClassName,
-  edgeMarkerName,
   initializeNodes,
   moveSVGInFront,
   setHighlightEdgeClassName,
   logTablePositions,
-  setEdgeClassName,
 } from './helpers';
 
 import { EdgeConfig, DatabaseConfig } from './types';
@@ -39,6 +36,11 @@ import {
   calculateSourcePosition,
   calculateTargetPosition,
 } from './helpers/calculators';
+import {
+  edgeClassName,
+  edgeMarkerName,
+  setEdgeClassName,
+} from './helpers/edge-helpers';
 
 interface FlowProps {
   currentDatabase: DatabaseConfig;

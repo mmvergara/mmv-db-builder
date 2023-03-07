@@ -1,7 +1,6 @@
 import { Edge, Node } from 'reactflow';
-import { edgeMarkerName } from './edgeMarkerName';
-import { edgeClassName } from './edgeClassName';
 import { DatabaseConfig, EdgeConfig } from '../types';
+import { edgeClassName, edgeMarkerName } from './edge-helpers';
 
 export const calculateSourcePosition = (
   sourceNodeWidth: number,
