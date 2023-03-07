@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { nodeTypes } from 'config/nodeTypes';
 import { useCallback, useState } from 'react';
 import ReactFlow, {
@@ -6,7 +5,6 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   Controls,
-  ControlButton,
   Background,
   useStoreApi,
   getConnectedEdges,
@@ -35,7 +33,7 @@ import {
   setEdgeClassName,
   setHighlightEdgeClassName,
 } from './helpers/edge-helpers';
-import { logTablePositions, moveSVGInFront } from './helpers/ui-helpers';
+import { moveSVGInFront } from './helpers/ui-helpers';
 import Markers from './components/Markers';
 
 interface FlowProps {
@@ -48,92 +46,21 @@ function Flow(props: FlowProps) {
   const store = useStoreApi();
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [fullscreenOn, setFullScreen] = useState(false);
-  const [infoPopupOn, setInfoPopupOn] = useState(false);
-  const [unknownDatasetOn, setUnknownDatasetOn] = useState(false);
-  const [databaseMenuPopupOn, setDatabaseMenuPopupOn] = useState(false);
   const [nodeHoverActive, setNodeHoverActive] = useState(true);
 
   const onInit = (instance: ReactFlowInstance) => {
     const noder = instance.getNodes();
     const initialEdges = calculateEdges(noder, currentDatabase);
     setEdges(() => initialEdges);
-
-    const handleKeyboard = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.key === 'p') {
-        const nodez = instance.getNodes();
-        logTablePositions(nodez);
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyboard);
-
-    // https://javascriptf1.com/snippet/detect-fullscreen-mode-with-javascript
-    window.addEventListener('resize', () => {
-      setFullScreen(window.innerHeight === window.screen.height);
-    });
-
-    document.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.code === 'Escape') {
-        setInfoPopupOn(false);
-        setUnknownDatasetOn(false);
-        setDatabaseMenuPopupOn(false);
-      }
-    });
-
-    // https://stackoverflow.com/questions/42066421/property-value-does-not-exist-on-type-eventtarget
-    document.addEventListener('click', (event: Event) => {
-      const popup = document.querySelector('.info-popup');
-
-      if (!popup) {
-        return;
-      }
-
-      const target = event.target as HTMLInputElement;
-
-      if (target && target.closest('.into-popup-toggle')) {
-        return;
-      }
-
-      if (target && !target.closest('.info-popup__inner')) {
-        setInfoPopupOn(false);
-        setUnknownDatasetOn(false);
-        setDatabaseMenuPopupOn(false);
-      }
-    });
-
-    document.addEventListener(
-      'keydown',
-      (e: KeyboardEvent) => {
-        if (e.code === 'MetaLeft') {
-          setNodeHoverActive(false);
-        }
-      },
-      false
-    );
-
-    document.addEventListener(
-      'keyup',
-      (e: KeyboardEvent) => {
-        if (e.code === 'MetaLeft') {
-          setNodeHoverActive(true);
-        }
-      },
-      false
-    );
   };
 
   // https://github.com/wbkd/react-flow/issues/2580
   const onNodeMouseEnter = useCallback(
     (_: any, node: Node) => {
-      if (!nodeHoverActive) {
-        return;
-      }
-
+      if (!nodeHoverActive) return;
       const state = store.getState();
       state.resetSelectedElements();
       state.addSelectedNodes([node.id]);
-
       const connectedEdges = getConnectedEdges([node], edges);
       setEdges((eds) => {
         return eds.map((ed) => {
@@ -148,22 +75,14 @@ function Flow(props: FlowProps) {
     [edges, nodeHoverActive, setEdges, store]
   );
 
-  const onNodeMouseLeave = useCallback(
-    (_: any, node: Node) => {
-      if (!nodeHoverActive) {
-        return;
-      }
-
-      const state = store.getState();
-      state.resetSelectedElements();
-
-      setEdges((eds) => eds.map((ed) => setEdgeClassName(ed)));
-
-      // https://stackoverflow.com/questions/2520650/how-do-you-clear-the-focus-in-javascript
-      (document.activeElement as HTMLElement).blur();
-    },
-    [nodeHoverActive, setEdges, store]
-  );
+  const onNodeMouseLeave = useCallback(() => {
+    if (!nodeHoverActive) return;
+    const state = store.getState();
+    state.resetSelectedElements();
+    setEdges((eds) => eds.map((ed) => setEdgeClassName(ed)));
+    // https://stackoverflow.com/questions/2520650/how-do-you-clear-the-focus-in-javascript
+    (document.activeElement as HTMLElement).blur();
+  }, [nodeHoverActive, setEdges, store]);
 
   const onSelectionChange = useCallback((params: OnSelectionChangeParams) => {
     const { edges: edgez } = params;
@@ -234,7 +153,6 @@ function Flow(props: FlowProps) {
                     ed.className = edgeClassName(edgeConfig, targetPosition);
                     ed.markerEnd = edgeMarkerName(edgeConfig, targetPosition);
                   }
-
                   return ed;
                 })
               );
@@ -297,7 +215,6 @@ function Flow(props: FlowProps) {
           });
         }
       });
-
       onNodesChange(nodeChanges);
     },
     [onNodesChange, setEdges, nodes, edges, currentDatabase]
