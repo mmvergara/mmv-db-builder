@@ -5,7 +5,7 @@ import {
   TableConfig,
   TablePositions,
   DatabaseConfigs,
-} from '../types';
+} from '../../types/DatabaseConfig';
 import { fullTableName } from './ui-helpers';
 
 export const loadDatabaseConfig = async (databaseName: string) => {

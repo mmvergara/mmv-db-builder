@@ -1,8 +1,4 @@
-import {
-  MemoryRouter as Router,
-  Routes,
-  Route,
-} from 'react-router-dom';
+import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
 import 'reactflow/dist/style.css';
 import './App.css';
