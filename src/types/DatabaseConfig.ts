@@ -1,6 +1,24 @@
-import { EdgeConfig } from './EdgeConfig';
-import { SchemaColors } from './SchemaColors';
-import { TablePositions } from './TablePositions';
+export interface SchemaColors {
+  [schemaName: string]: string;
+}
+
+export interface Position {
+  x: number;
+  y: number;
+}
+export interface TablePositions {
+  [tableName: string]: Position;
+}
+
+export interface EdgeConfig {
+  source: string;
+  sourceKey: string;
+  target: string;
+  targetKey: string;
+  relation: string;
+  sourcePosition?: string;
+  targetPosition?: string;
+}
 
 export type Database = {
   name: string;

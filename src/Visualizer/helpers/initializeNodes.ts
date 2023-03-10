@@ -5,7 +5,7 @@ import {
   Position,
   TableConfig,
   TablePositions,
-} from '../types';
+} from '../../types/DatabaseConfig';
 import { fullTableName } from './ui-helpers';
 
 const setHandleType = (

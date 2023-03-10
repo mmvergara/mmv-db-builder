@@ -15,7 +15,7 @@ import ReactFlow, {
   ReactFlowInstance,
 } from 'reactflow';
 
-import { EdgeConfig, DatabaseConfig } from './types';
+import { EdgeConfig, DatabaseConfig } from '../types/DatabaseConfig';
 
 // this is important! You need to import the styles from the lib to make it work
 import 'reactflow/dist/style.css';
