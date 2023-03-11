@@ -1,24 +1,21 @@
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
-import 'reactflow/dist/style.css';
+import FlowPage from 'flow/FlowPage';
+import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import './MainStyles.scss';
-import Visualizer from 'Visualizer';
-import databases from 'config/databases';
+import 'reactflow/dist/style.css';
+import './styles.ts';
 
-function Database() {
-  const databaseNames = Object.keys(databases);
-  const databaseName = databaseNames[0];
-
-  return <Visualizer database={databaseName} />;
+function HomePage() {
+  return <FlowPage />;
 }
 
 export default function App() {
   return (
-    <MantineProvider withGlobalStyles withNormalizeCSS>
+    <MantineProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<Database />} />
+          <Route path="/" element={<HomePage />} />
         </Routes>
       </Router>
     </MantineProvider>
