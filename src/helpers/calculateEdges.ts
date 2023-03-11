@@ -1,5 +1,5 @@
 import { Node } from 'reactflow';
-import { CustomEdge, CustomNode, Relation } from 'types/types';
+import { CustomEdge, CustomNode, MarkerType, Relation } from 'types/types';
 
 export const calculateSourcePosition = (
   sourceNodeWidth: number,
@@ -27,7 +27,12 @@ export const calculateTargetPosition = (
   return 'left';
 };
 
-const determineMarkers = (relation: Relation) => {
+const determineMarkers = (
+  relation: Relation
+): {
+  markerStart: MarkerType;
+  markerEnd: MarkerType;
+} => {
   if (relation.relation === 'one-to-one') {
     return {
       markerStart: 'hasOneReversed',
@@ -88,7 +93,7 @@ export const calculateEdges = (
       const sourceHandle = `${relation.sourceKey}-${sourcePosition}`;
       const targetHandle = `${relation.targetKey}-${targetPosition}`;
 
-      const edge = {
+      const edge: CustomEdge = {
         id: `${sourceNode.id}-${targetNode.id}`,
         source: sourceNode.id,
         target: targetNode.id,
@@ -100,5 +105,6 @@ export const calculateEdges = (
       initialEdges.push(edge);
     }
   });
+  console.log('initialEdges', initialEdges);
   return initialEdges;
 };

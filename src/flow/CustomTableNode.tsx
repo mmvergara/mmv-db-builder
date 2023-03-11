@@ -23,47 +23,30 @@ function TableNode({ data }: TableNodeProps) {
 
           return (
             <div key={index} className="column-name">
-              <Handle
-                type="source"
-                position={Position.Right}
-                id={`${colName}-right`}
-                className={
-                  colHandleType === 'source'
-                    ? 'right-handle source-handle'
-                    : 'right-handle target-handle'
-                }
-              />
-              <Handle
-                type="target"
-                position={Position.Left}
-                id={`${colName}-left`}
-                className={
-                  colHandleType === 'source'
-                    ? 'right-handle source-handle'
-                    : 'right-handle target-handle'
-                }
-              />
-              <Handle
-                type="target"
-                position={Position.Left}
-                id={`${colName}-right`}
-                className={
-                  colHandleType === 'source'
-                    ? 'left-handle source-handle'
-                    : 'left-handle target-handle'
-                }
-              />
-              <Handle
-                type="source"
-                position={Position.Left}
-                id={`${colName}-left`}
-                className={
-                  colHandleType === 'source'
-                    ? 'right-handle source-handle'
-                    : 'right-handle target-handle'
-                }
-              />
-
+              {colHandleType && (
+                <Handle
+                  type={colHandleType}
+                  position={Position.Right}
+                  id={`${colName}-right`}
+                  className={
+                    colHandleType === 'source'
+                      ? 'right-handle source-handle'
+                      : 'right-handle target-handle'
+                  }
+                />
+              )}
+              {colHandleType && (
+                <Handle
+                  type={colHandleType}
+                  position={Position.Left}
+                  id={`${colName}-left`}
+                  className={
+                    colHandleType === 'source'
+                      ? 'left-handle source-handle'
+                      : 'left-handle target-handle'
+                  }
+                />
+              )}
               <div className="column-name__inner">
                 <div className="column-name__name">
                   {colIsKey && <KeyIcon />}

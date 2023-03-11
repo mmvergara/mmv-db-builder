@@ -17,6 +17,12 @@ export type CustomNode = {
   }[];
 };
 
+export type MarkerType =
+  | 'hasManyReversed'
+  | 'hasOneReversed'
+  | 'hasMany'
+  | 'hasOne';
+
 export type CustomEdge = {
   id: string;
   source: string;
@@ -24,6 +30,6 @@ export type CustomEdge = {
   sourceHandle: string;
   targetHandle: string;
   type: string;
-  markerStart: 'hasManyReversed' | 'hasOneReversed';
-  markerEnd: 'hasManyReversed' | 'hasOneReversed';
+  markerStart: MarkerType;
+  markerEnd: MarkerType;
 };

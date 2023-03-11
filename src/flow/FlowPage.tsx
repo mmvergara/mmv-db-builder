@@ -3,11 +3,13 @@ import { useDisclosure } from '@mantine/hooks';
 import DrawerControl from 'components/drawerControl';
 import Markers from 'components/Markers';
 import { calculateEdges } from 'helpers/calculateEdges';
+import { setNodesHandleType } from 'helpers/setNodesHandleType';
 import { useCallback, useEffect, useState } from 'react';
 import {
   applyNodeChanges,
   Background,
   Controls,
+  Node,
   ReactFlow,
   ReactFlowProvider,
   useEdgesState,
@@ -83,23 +85,23 @@ function FlowPage() {
     useDisclosure(false);
 
   const [relations, setRelations] = useState<Relation[]>(initialRelations);
-  const [nodes, setNodes] = useState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-
+  const [nodes, setNodes] = useState(
+    setNodesHandleType(initialNodes, relations)
+  );
+  const [edges, setEdges, onEdgesChange] = useEdgesState(
+    calculateEdges(nodes, relations)
+  );
   const onNodesChange = useCallback(
     (changes) => {
       return setNodes((nds) => {
         const newNodes = applyNodeChanges(changes, nds);
-        setEdges(calculateEdges(newNodes, relations));
-        return newNodes;
+        const settedNodes = setNodesHandleType(newNodes, relations);
+        setEdges(calculateEdges(settedNodes, relations));
+        return settedNodes;
       });
     },
     [setNodes]
   );
-
-  useEffect(() => {
-    setEdges(calculateEdges(nodes, relations));
-  }, []);
 
   return (
     <AppShell
