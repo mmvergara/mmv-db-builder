@@ -1,47 +1,104 @@
+import { Node } from 'reactflow';
 import { CustomEdge, CustomNode, Relation } from 'types/types';
 
-export const zsd = '';
+export const calculateSourcePosition = (
+  sourceNodeWidth: number,
+  sourceNodeX: number,
+  targetNodeWidth: number,
+  targetNodeX: number
+): string => {
+  const leftBoundary = targetNodeX + targetNodeWidth;
+  const rightBoundary = targetNodeX;
+  if (sourceNodeX > leftBoundary) return 'left';
+  if (sourceNodeX + sourceNodeWidth < rightBoundary) return 'right';
+  return 'left';
+};
+
+export const calculateTargetPosition = (
+  sourceNodeWidth: number,
+  sourceNodeX: number,
+  targetNodeWidth: number,
+  targetNodeX: number
+): string => {
+  const leftBoundary = targetNodeX;
+  const rightBoundary = targetNodeX + targetNodeWidth;
+  if (sourceNodeX + sourceNodeWidth < leftBoundary) return 'left';
+  if (sourceNodeX > rightBoundary) return 'right';
+  return 'left';
+};
+
+const determineMarkers = (relation: Relation) => {
+  if (relation.relation === 'one-to-one') {
+    return {
+      markerStart: 'hasOneReversed',
+      markerEnd: 'hasOne',
+    };
+  }
+  if (relation.relation === 'one-to-many') {
+    return {
+      markerStart: 'hasOne',
+      markerEnd: 'hasManyReversed',
+    };
+  }
+  if (relation.relation === 'many-to-one') {
+    return {
+      markerStart: 'hasManyReversed',
+      markerEnd: 'hasOne',
+    };
+  }
+  if (relation.relation === 'many-to-many') {
+    return {
+      markerStart: 'hasManyReversed',
+      markerEnd: 'hasMany',
+    };
+  }
+  return {
+    markerStart: 'hasManyReversed',
+    markerEnd: 'hasMany',
+  };
+};
 
 export const calculateEdges = (
-  nodes: { id: string; type: 'TableNode'; data: CustomNode }[],
+  nodes: Node<CustomNode>[],
   relations: Relation[]
 ): CustomEdge[] => {
-  const edges: CustomEdge[] = [];
-  console.log(nodes);
-  relations.forEach((relation) => {
-    console.log(nodes);
-    console.log(relation);
-    const source = nodes.find(
-      (node) => node.data.tableName === relation.sourceTable
+  const initialEdges: CustomEdge[] = [];
+  relations.forEach((relation: Relation) => {
+    const sourceNode = nodes.find(
+      (node: Node<CustomNode>) => node.id === relation.sourceTable
     );
-    const target = nodes.find(
-      (node) => node.data.tableName === relation.targetTable
+    const targetNode = nodes.find(
+      (node: Node<CustomNode>) => node.id === relation.targetTable
     );
-    if (source && target) {
-      const sourceHandle = source.data.columns.find(
-        (column) => column.colIsKey
-      )?.colName;
-      const targetHandle = target.data.columns.find(
-        (column) => column.colIsKey
-      )?.colName;
 
-      if (sourceHandle && targetHandle) {
-        edges.push({
-          id: `${relation.sourceTable}-${
-            relation.targetTable
-          }-${Math.random().toString()}`,
-          source: relation.sourceTable,
-          target: relation.targetTable,
-          sourceHandle: sourceHandle + '-right',
-          targetHandle: targetHandle + '-left',
-          type: 'smoothstep',
-          markerStart: 'hasManyReversed',
-          markerEnd: 'hasManyReversed',
-        });
-      }
+    if (sourceNode && targetNode) {
+      const sourcePosition = calculateSourcePosition(
+        sourceNode.width as number,
+        sourceNode!.position.x,
+        targetNode.width as number,
+        targetNode.position.x
+      );
+      const targetPosition = calculateTargetPosition(
+        sourceNode.width as number,
+        sourceNode!.position.x,
+        targetNode.width as number,
+        targetNode.position.x
+      );
+
+      const sourceHandle = `${relation.sourceKey}-${sourcePosition}`;
+      const targetHandle = `${relation.targetKey}-${targetPosition}`;
+
+      const edge = {
+        id: `${sourceNode.id}-${targetNode.id}`,
+        source: sourceNode.id,
+        target: targetNode.id,
+        sourceHandle,
+        targetHandle,
+        type: 'smoothstep',
+        ...determineMarkers(relation),
+      };
+      initialEdges.push(edge);
     }
   });
-  console.log('FINAL');
-  console.log(edges);
-  return edges;
+  return initialEdges;
 };

@@ -1,7 +1,9 @@
 export type Relation = {
   sourceTable: string;
+  sourceKey: string;
   targetTable: string;
-  relation: string;
+  targetKey: string;
+  relation: 'one-to-one' | 'one-to-many' | 'many-to-one' | 'many-to-many';
 };
 
 export type CustomNode = {

@@ -3,34 +3,33 @@ import { useDisclosure } from '@mantine/hooks';
 import DrawerControl from 'components/drawerControl';
 import Markers from 'components/Markers';
 import { calculateEdges } from 'helpers/calculateEdges';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
+  applyNodeChanges,
   Background,
   Controls,
-  Edge,
   ReactFlow,
   ReactFlowProvider,
   useEdgesState,
-  useNodesState,
 } from 'reactflow';
-import { CustomEdge, Relation } from 'types/types';
+import { Relation } from 'types/types';
 import nodeType from './CustomTableNode';
 
 const initialNodes = [
   {
-    id: 'orders',
+    id: 'xx-vendors',
     type: 'TableNode',
     data: {
-      tableName: 'orders',
+      tableName: 'xx-vendors',
       columns: [
         {
-          colName: 'id',
+          colName: '11-id',
           colDataType: 'int',
           colIsKey: true,
           colIsNullable: false,
         },
         {
-          colName: 'customer_id',
+          colName: '22-vendor_name',
           colDataType: 'int',
           colIsKey: false,
           colIsNullable: false,
@@ -40,20 +39,26 @@ const initialNodes = [
     position: { x: 250, y: 5 },
   },
   {
-    id: 'products',
+    id: 'zz-transactions',
     type: 'TableNode',
     data: {
-      tableName: 'products',
+      tableName: 'zz-transactions',
       columns: [
         {
-          colName: 'id',
+          colName: '33-id',
           colDataType: 'int',
           colIsKey: true,
           colIsNullable: false,
         },
         {
-          colName: 'name',
-          colDataType: 'varchar',
+          colName: '44-vendor_id',
+          colDataType: 'int',
+          colIsKey: false,
+          colIsNullable: false,
+        },
+        {
+          colName: '55-amount',
+          colDataType: 'int',
           colIsKey: false,
           colIsNullable: false,
         },
@@ -63,21 +68,14 @@ const initialNodes = [
   },
 ];
 
-// const initialEdges: CustomEdge = [
-//   {
-//     id: 'edge-1',
-//     source: 'orders',
-//     target: 'products',
-//     sourceHandle: 'id-right',
-//     targetHandle: 'id-left',
-//     type: 'smoothstep',
-//     markerStart: 'hasManyReversed',
-//     markerEnd: 'hasManyReversed',
-//   },
-// ];
-
 const initialRelations: Relation[] = [
-  { sourceTable: 'orders', targetTable: 'products', relation: 'hasMany' },
+  {
+    sourceTable: 'xx-vendors',
+    sourceKey: '11-id',
+    targetTable: 'zz-transactions',
+    targetKey: '44-vendor_id',
+    relation: 'many-to-one',
+  },
 ];
 
 function FlowPage() {
@@ -85,9 +83,20 @@ function FlowPage() {
     useDisclosure(false);
 
   const [relations, setRelations] = useState<Relation[]>(initialRelations);
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  console.log(nodes);
+
+  const onNodesChange = useCallback(
+    (changes) => {
+      return setNodes((nds) => {
+        const newNodes = applyNodeChanges(changes, nds);
+        setEdges(calculateEdges(newNodes, relations));
+        return newNodes;
+      });
+    },
+    [setNodes]
+  );
+
   useEffect(() => {
     setEdges(calculateEdges(nodes, relations));
   }, []);

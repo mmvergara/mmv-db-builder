@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
 import { CustomNode } from '../types/types';
 import KeyIcon from '../components/KeyIcon';
@@ -40,8 +39,28 @@ function TableNode({ data }: TableNodeProps) {
                 id={`${colName}-left`}
                 className={
                   colHandleType === 'source'
+                    ? 'right-handle source-handle'
+                    : 'right-handle target-handle'
+                }
+              />
+              <Handle
+                type="target"
+                position={Position.Left}
+                id={`${colName}-right`}
+                className={
+                  colHandleType === 'source'
                     ? 'left-handle source-handle'
                     : 'left-handle target-handle'
+                }
+              />
+              <Handle
+                type="source"
+                position={Position.Left}
+                id={`${colName}-left`}
+                className={
+                  colHandleType === 'source'
+                    ? 'right-handle source-handle'
+                    : 'right-handle target-handle'
                 }
               />
 
