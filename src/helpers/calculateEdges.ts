@@ -36,25 +36,25 @@ const determineMarkers = (
   if (relation.relation === 'one-to-one') {
     return {
       markerStart: 'hasOneReversed',
-      markerEnd: 'hasOne',
+      markerEnd: 'hasOneReversed',
     };
   }
   if (relation.relation === 'one-to-many') {
     return {
-      markerStart: 'hasOne',
+      markerStart: 'hasOneReversed',
       markerEnd: 'hasManyReversed',
     };
   }
   if (relation.relation === 'many-to-one') {
     return {
       markerStart: 'hasManyReversed',
-      markerEnd: 'hasOne',
+      markerEnd: 'hasOneReversed',
     };
   }
   if (relation.relation === 'many-to-many') {
     return {
       markerStart: 'hasManyReversed',
-      markerEnd: 'hasMany',
+      markerEnd: 'hasManyReversed',
     };
   }
   return {
@@ -100,11 +100,11 @@ export const calculateEdges = (
         sourceHandle,
         targetHandle,
         type: 'smoothstep',
+        selected: true,
         ...determineMarkers(relation),
       };
       initialEdges.push(edge);
     }
   });
-  console.log('initialEdges', initialEdges);
   return initialEdges;
 };

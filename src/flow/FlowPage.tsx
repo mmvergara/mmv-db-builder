@@ -4,12 +4,12 @@ import DrawerControl from 'components/drawerControl';
 import Markers from 'components/Markers';
 import { calculateEdges } from 'helpers/calculateEdges';
 import { setNodesHandleType } from 'helpers/setNodesHandleType';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   applyNodeChanges,
   Background,
   Controls,
-  Node,
+  NodeChange,
   ReactFlow,
   ReactFlowProvider,
   useEdgesState,
@@ -76,7 +76,14 @@ const initialRelations: Relation[] = [
     sourceKey: '11-id',
     targetTable: 'zz-transactions',
     targetKey: '44-vendor_id',
-    relation: 'many-to-one',
+    relation: 'one-to-many',
+  },
+  {
+    sourceTable: 'xx-vendors',
+    sourceKey: '22-vendor_name',
+    targetTable: 'zz-transactions',
+    targetKey: '55-amount',
+    relation: 'many-to-many',
   },
 ];
 
@@ -88,11 +95,12 @@ function FlowPage() {
   const [nodes, setNodes] = useState(
     setNodesHandleType(initialNodes, relations)
   );
+
   const [edges, setEdges, onEdgesChange] = useEdgesState(
     calculateEdges(nodes, relations)
   );
   const onNodesChange = useCallback(
-    (changes) => {
+    (changes: NodeChange[]) => {
       return setNodes((nds) => {
         const newNodes = applyNodeChanges(changes, nds);
         const settedNodes = setNodesHandleType(newNodes, relations);
@@ -100,6 +108,7 @@ function FlowPage() {
         return settedNodes;
       });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [setNodes]
   );
 
@@ -146,7 +155,7 @@ function FlowPage() {
           onEdgesChange={onEdgesChange}
           nodeTypes={nodeType}
         >
-          <Background />
+          <Background gap={[4, 4]} color="white" />
           <Controls />
         </ReactFlow>
       </ReactFlowProvider>

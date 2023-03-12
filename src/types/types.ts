@@ -30,6 +30,8 @@ export type CustomEdge = {
   sourceHandle: string;
   targetHandle: string;
   type: string;
+  selected: boolean;
   markerStart: MarkerType;
   markerEnd: MarkerType;
+  className?: string;
 };
