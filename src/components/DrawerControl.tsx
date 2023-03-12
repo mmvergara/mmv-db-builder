@@ -1,14 +1,28 @@
-import { Button, Drawer, DrawerProps, Flex } from '@mantine/core';
+import { Button, Drawer, DrawerProps, Flex, TextInput } from '@mantine/core';
+import { NodeType } from 'helpers/setNodesHandleType';
+import { config } from 'process';
+import { CustomNode, CustomNodeColumn } from 'types/types';
+import uniqid from 'uniqid';
 
-function DrawerControl(props: DrawerProps) {
-  const { onClose } = props;
+type Props = {
+  updateTableName: (oldName: string, newName: string) => void;
+  updateColumnProperties: (
+    tableName: string,
+    oldColName: string,
+    newColProperties: CustomNodeColumn
+  ) => void;
+  nodes: NodeType[];
+};
+
+function DrawerControl(props: DrawerProps & Props) {
+  const { onClose, nodes, updateTableName } = props;
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
     <Drawer {...props}>
       <Drawer.Body m={0} h="100%">
         <Flex bg="#38235c" p="sm" justify="space-between">
           <Button color="teal" variant="filled" onClick={onClose}>
-            👑 Create Table
+            👑 Create Tableaaaa
           </Button>{' '}
           {/* <Button
             color="teal"
@@ -44,9 +58,18 @@ function DrawerControl(props: DrawerProps) {
             </svg>
           </Button>
         </Flex>
-        {/* {tables.map((table) => {
-          return <TableControl key={table.name} TableData={table} />;
-        })} */}
+        {nodes.map((node, i) => {
+          return (
+            <TextInput
+              key={i}
+              value={node.id}
+              onChange={(e) => {
+                console.log(e)
+                updateTableName(node.id, e.target.value);
+              }}
+            />
+          );
+        })}
       </Drawer.Body>
     </Drawer>
   );

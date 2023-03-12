@@ -1,5 +1,6 @@
 import { Node } from 'reactflow';
 import { CustomEdge, CustomNode, MarkerType, Relation } from 'types/types';
+import uniqid from 'uniqid';
 
 export const calculateSourcePosition = (
   sourceNodeWidth: number,
@@ -94,7 +95,7 @@ export const calculateEdges = (
       const targetHandle = `${relation.targetKey}-${targetPosition}`;
 
       const edge: CustomEdge = {
-        id: `${sourceNode.id}-${targetNode.id}`,
+        id: `${sourceNode.id}-${targetNode.id}-${uniqid()}`,
         source: sourceNode.id,
         target: targetNode.id,
         sourceHandle,

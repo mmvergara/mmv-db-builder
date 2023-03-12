@@ -2,7 +2,7 @@
 import { Node } from 'reactflow';
 import { CustomNode, Relation } from 'types/types';
 
-type NodeType = Node<
+export type NodeType = Node<
   {
     tableName: string;
     columns: {
