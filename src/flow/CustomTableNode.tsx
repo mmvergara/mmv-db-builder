@@ -32,14 +32,13 @@ function TableNode({ data }: TableNodeProps) {
       >
         {data.columns.map((column) => {
           const { colDataType, colIsKey, colName, colHandleType } = column;
-
           return (
             <Box key={uniqid()} className="column-name">
               {colHandleType && (
                 <Handle
                   type={colHandleType}
                   position={Position.Right}
-                  id={`${colName}-right`}
+                  id={`${data.tableName}-${colName}-right`}
                   className={
                     colHandleType === 'source'
                       ? 'right-handle source-handle'
@@ -51,7 +50,7 @@ function TableNode({ data }: TableNodeProps) {
                 <Handle
                   type={colHandleType}
                   position={Position.Left}
-                  id={`${colName}-left`}
+                  id={`${data.tableName}-${colName}-left`}
                   className={
                     colHandleType === 'source'
                       ? 'left-handle source-handle'

@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import { Node } from 'reactflow';
-import { CustomNode, Relation } from 'types/types';
+import { CustomNode, RelationType } from 'types/types';
 
 export type NodeType = Node<
   {
@@ -15,22 +15,31 @@ export type NodeType = Node<
   string | undefined
 >;
 
-export const setNodesHandleType = (node: NodeType[], relations: Relation[]) => {
+export const setNodesHandleType = (
+  node: NodeType[],
+  relations: RelationType[]
+) => {
   const newNodes = node.map((n: NodeType) => {
     const newColumns = n.data.columns.map((col) => {
-      const relation = relations.find(
-        (rel) =>
-          rel.sourceTable === n.data.tableName && rel.sourceKey === col.colName
-      );
+      const relation = relations.find((r) => {
+        return (
+          r.sourceTable === n.data.tableName &&
+          r.sourceKey === `${r.sourceTable}-${col.colName}`
+        );
+      });
       const relation2 = relations.find(
-        (rel) =>
-          rel.targetTable === n.data.tableName && rel.targetKey === col.colName
+        (r) =>
+          r.targetTable === n.data.tableName &&
+          r.targetKey === `${r.targetTable}-${col.colName}`
       );
+
       if (relation) {
         return {
           ...col,
           colHandleType:
-            col.colName === relation.sourceKey ? 'source' : 'target',
+            `${relation.sourceTable}-${col.colName}` === relation.sourceKey
+              ? 'source'
+              : 'target',
         };
       }
       if (relation2) {

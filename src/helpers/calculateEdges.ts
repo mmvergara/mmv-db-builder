@@ -90,7 +90,6 @@ export const calculateEdges = (
         targetNode.width as number,
         targetNode.position.x
       );
-
       const sourceHandle = `${relation.sourceKey}-${sourcePosition}`;
       const targetHandle = `${relation.targetKey}-${targetPosition}`;
 

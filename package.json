@@ -77,6 +77,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.1",
     "reactflow": "^11.5.6",
+    "tabler-icons-react": "^1.56.0",
     "uniqid": "^5.4.0"
   },
   "devDependencies": {
