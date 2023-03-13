@@ -1,9 +1,9 @@
 import { MantineProvider } from '@mantine/core';
-import FlowPage from 'flow/FlowPage';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import './styles.ts';
 import 'reactflow/dist/style.css';
+import FlowPage from 'flow/ReFlowPage';
 
 function HomePage() {
   return <FlowPage />;

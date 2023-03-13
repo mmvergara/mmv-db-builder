@@ -1,3 +1,10 @@
+import { XYPosition } from 'reactflow';
+
+export type nodePosition = {
+  nodeId: string;
+  position: XYPosition;
+};
+
 export type Relation = {
   sourceTable: string;
   sourceKey: string;
