@@ -3,6 +3,7 @@ import { calculateEdges } from 'helpers/calculateEdges';
 import { setNodesHandleType } from 'helpers/setNodesHandleType';
 import { config } from 'process';
 import {
+  Background,
   Node,
   OnMove,
   Position,
@@ -59,7 +60,9 @@ function MainReactFlow({
         nodeTypes={nodeType}
         onNodeDrag={(e, n) => handleNodeDrag(n.id, n.position)}
         defaultViewport={{ zoom: 1, x: 250, y: 250 }}
-      />
+      >
+        <Background gap={[16, 16]} />
+      </ReactFlow>
     </div>
   );
 }

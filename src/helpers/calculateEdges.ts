@@ -10,8 +10,9 @@ export const calculateSourcePosition = (
 ): string => {
   const leftBoundary = targetNodeX + targetNodeWidth;
   const rightBoundary = targetNodeX;
-  if (sourceNodeX > leftBoundary) return 'left';
-  if (sourceNodeX + sourceNodeWidth < rightBoundary) return 'right';
+
+  if (sourceNodeX + 50 > leftBoundary) return 'left';
+  if (sourceNodeX + sourceNodeWidth - 50 < rightBoundary) return 'right';
   return 'left';
 };
 
@@ -23,8 +24,8 @@ export const calculateTargetPosition = (
 ): string => {
   const leftBoundary = targetNodeX;
   const rightBoundary = targetNodeX + targetNodeWidth;
-  if (sourceNodeX + sourceNodeWidth < leftBoundary) return 'left';
-  if (sourceNodeX > rightBoundary) return 'right';
+  if (sourceNodeX + sourceNodeWidth - 50 < leftBoundary) return 'left';
+  if (sourceNodeX + 50 > rightBoundary) return 'right';
   return 'left';
 };
 
