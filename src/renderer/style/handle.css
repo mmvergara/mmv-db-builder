@@ -4,7 +4,7 @@
   min-width: 2px;
   left: 0;
   top: 50%;
-  transform: translateX(-50%) translateY(-50%);
+  transform: translateX(50%) translateY(-55%) !important;
 }
 
 .right-handle {
@@ -13,5 +13,5 @@
   min-width: 2px;
   right: 0;
   top: 50%;
-  transform: translateX(50%) translateY(-50%);
+  transform: translateX(-55%) translateY(-50%) !important;
 }

@@ -1,5 +1,6 @@
-import { useState } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
+import { Box, Flex, Text } from '@mantine/core';
+import uniqid from 'uniqid';
 import { CustomNode } from '../types/types';
 import KeyIcon from '../components/KeyIcon';
 
@@ -7,56 +8,74 @@ type TableNodeProps = NodeProps<CustomNode>;
 
 function TableNode({ data }: TableNodeProps) {
   return (
-    <div className="table">
-      <div style={{ backgroundColor: 'cyan' }} className="table__name">
+    <Box bg="white" m={0}>
+      <Text
+        bg="green"
+        color="white"
+        align="center"
+        fw={600}
+        style={{
+          padding: '5px',
+          border: '1px solid #CBD2D9',
+          borderRadius: '4px 4px 0px 0px',
+        }}
+      >
         {data.tableName}
-        <div className="table__description" />
-      </div>
-      <div className="table__columns">
-        {data.columns.map((column, index: any) => {
-          const {
-            colDataType,
-            colIsKey,
-            colIsNullable,
-            colName,
-            colHandleType,
-          } = column;
-
+      </Text>
+      <Flex
+        direction="column"
+        style={{
+          border: '1px solid #CBD2D9',
+          borderTop: '0',
+          borderRadius: '0 0 4px 4px',
+        }}
+      >
+        {data.columns.map((column) => {
+          const { colDataType, colIsKey, colName, colHandleType } = column;
           return (
-            <div key={index} className="column-name">
-              <Handle
-                type="source"
-                position={Position.Right}
-                id={`${colName}-right`}
-                className={
-                  colHandleType === 'source'
-                    ? 'right-handle source-handle'
-                    : 'right-handle target-handle'
-                }
-              />
-              <Handle
-                type="target"
-                position={Position.Left}
-                id={`${colName}-left`}
-                className={
-                  colHandleType === 'source'
-                    ? 'left-handle source-handle'
-                    : 'left-handle target-handle'
-                }
-              />
-
+            <Box key={uniqid()} className="column-name">
+              {colHandleType && (
+                <Handle
+                  type={colHandleType}
+                  position={Position.Right}
+                  id={`${data.tableName}-${colName}-right`}
+                  className={
+                    colHandleType === 'source'
+                      ? 'right-handle source-handle'
+                      : 'right-handle target-handle'
+                  }
+                />
+              )}
+              {colHandleType && (
+                <Handle
+                  type={colHandleType}
+                  position={Position.Left}
+                  id={`${data.tableName}-${colName}-left`}
+                  className={
+                    colHandleType === 'source'
+                      ? 'left-handle source-handle'
+                      : 'left-handle target-handle'
+                  }
+                />
+              )}
               <div className="column-name__inner">
-                <div className="column-name__name">
+                <Text
+                  fw={500}
+                  pl={!colIsKey ? 15 : 0}
+                  className="column-name__name"
+                >
                   {colIsKey && <KeyIcon />}
                   {colName}
-                </div>
-                <div className="column-name__type">{colDataType}</div>
+                </Text>
+                <Text pl={50} fw={600} color="dimmed">
+                  {colDataType}
+                </Text>
               </div>
-            </div>
+            </Box>
           );
         })}
-      </div>
-    </div>
+      </Flex>
+    </Box>
   );
 }
 
