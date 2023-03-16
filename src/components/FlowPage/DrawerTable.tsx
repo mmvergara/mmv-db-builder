@@ -6,10 +6,12 @@ import {
   Button,
   Checkbox,
   Collapse,
+  Divider,
   Flex,
   Modal,
   Text,
   TextInput,
+  Title,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
@@ -79,23 +81,23 @@ function DrawerTable({
         >
           <DotsVertical size={30} strokeWidth={2} color="white" />
         </Button>
+        {/* EDIT TABLE MODAL =======================================*/}
         <Modal opened={modalOpened} onClose={modalClose}>
           <Box p={4}>
+            <Title align="center" order={2} mb={10}>
+              Edit Table
+            </Title>
             <TextInput
               value={newTableName}
               onChange={(e) => {
                 setNewTableName(e.target.value);
               }}
+              error={newTableName === '' ? 'Table name cannot be empty' : ''}
             />
+
             <Button
-              onClick={() => {
-                removeTable(node.id);
-                modalClose();
-              }}
-            >
-              Delete Table
-            </Button>
-            <Button
+              w="100%"
+              mt={10}
               onClick={() => {
                 updateTableName(node.id, newTableName);
                 modalClose();
@@ -103,8 +105,22 @@ function DrawerTable({
             >
               Update Table Name
             </Button>
+            <br />
+            <Divider my={20} />
+            <Button
+              w="100%"
+              onClick={() => {
+                removeTable(node.id);
+                modalClose();
+              }}
+              color="red"
+              variant="light"
+            >
+              Delete Table
+            </Button>
           </Box>
         </Modal>
+        {/* EDIT TABLE MODAL =======================================*/}
       </Flex>
       <Collapse in={tableExpanded}>
         {node.data.columns.map((col, i) => {

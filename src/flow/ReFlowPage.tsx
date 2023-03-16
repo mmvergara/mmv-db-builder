@@ -1,8 +1,10 @@
 import { AppShell, Button, Drawer, Flex } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { showNotification } from '@mantine/notifications';
 import DrawerTable from 'components/FlowPage/DrawerTable';
 import FlowHeader from 'components/FlowPage/Header';
 import Markers from 'components/Markers';
+import { config } from 'process';
 import { useState } from 'react';
 import { XYPosition } from 'reactflow';
 import { nodePosition, RelationType, TableNodeType } from 'types/types';
@@ -13,6 +15,9 @@ function FlowPage() {
     { nodeId: 'xx-vendors', position: { x: 0, y: 0 } },
     { nodeId: 'xx-vendor_contacts', position: { x: 250, y: 0 } },
   ]);
+  const [savedNodePositions, setSavedNodePositions] = useState<nodePosition[]>(
+    []
+  );
   const [nodes, setNodes] = useState<TableNodeType[]>([
     {
       type: 'TableNode',
@@ -91,6 +96,12 @@ function FlowPage() {
 
   const updateTableName = (nodeId: string, newTableName: string) => {
     // update node id and data.tableName
+    if (!newTableName) return;
+    // if the new table name is already in use, return
+    if (nodes.find((n) => n.id === newTableName)) {
+      showNotification({ message: 'Table name already in use', color: 'red' });
+      return;
+    }
     setNodes((lastNodes) => {
       return lastNodes.map((n) => {
         if (n.id === nodeId) {
@@ -253,8 +264,8 @@ function FlowPage() {
   // calculate edges willbe on MainReactFlow
   const onNodeDrag = (nodeId: string, newPosition: XYPosition) => {
     // if node is not in nodePositions, add it
-    if (!nodePositions.find((n) => n.nodeId === nodeId)) {
-      setNodePositions((lastNodePositions) => {
+    if (!savedNodePositions.find((n) => n.nodeId === nodeId)) {
+      setSavedNodePositions((lastNodePositions) => {
         if (lastNodePositions.find((n) => n.nodeId === nodeId))
           return lastNodePositions;
         return [...lastNodePositions, { nodeId, position: newPosition }];
@@ -262,7 +273,7 @@ function FlowPage() {
       return;
     }
     // if node is in nodePositions, update it
-    setNodePositions((lastNodePositions) => {
+    setSavedNodePositions((lastNodePositions) => {
       return lastNodePositions.map((n) => {
         if (n.nodeId === nodeId) return { ...n, position: newPosition };
 
