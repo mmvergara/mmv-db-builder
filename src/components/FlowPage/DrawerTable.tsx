@@ -59,7 +59,10 @@ function DrawerTable({
     <Flex direction="column" h="100%">
       <Flex w="100%" align="center" bg="#0E99AC" p={4} h="100%">
         <Text
-          style={{ flex: 5, cursor: 'pointer' }}
+          style={{
+            flex: 5,
+            cursor: 'pointer',
+          }}
           align="center"
           fw={600}
           color="white"
@@ -67,7 +70,13 @@ function DrawerTable({
         >
           {node.id}
         </Text>
-        <Button color="ocean-blue" px={4} onClick={() => modalOpen()}>
+        <Button
+          color="cyan"
+          variant="outline"
+          px={4}
+          style={{ border: 'none' }}
+          onClick={() => modalOpen()}
+        >
           <DotsVertical size={30} strokeWidth={2} color="white" />
         </Button>
         <Modal opened={modalOpened} onClose={modalClose}>
@@ -107,6 +116,8 @@ function DrawerTable({
                 onChange={(e) => {
                   updateColumnName(node.id, i, e.target.value);
                 }}
+                placeholder="Column Name"
+                radius="0"
               />{' '}
               <TextInput
                 key={i}
@@ -114,32 +125,42 @@ function DrawerTable({
                 onChange={(e) => {
                   updateColumnDataType(node.id, i, e.target.value);
                 }}
+                placeholder="Data Type"
+                radius="0"
               />
-              <Button variant="light" px={4}>
+              <Button
+                color="teal"
+                variant="default"
+                px={4}
+                radius="0"
+                onClick={() => updateColumnIsKey(node.id, i, !col.colIsKey)}
+              >
+                <Text mx={10}>Key</Text>
                 <Checkbox
                   checked={col.colIsKey}
-                  onChange={(e) => {
-                    updateColumnIsKey(node.id, i, e.target.checked);
-                  }}
+                  onChange={(e) =>
+                    updateColumnIsKey(node.id, i, e.target.checked)
+                  }
+                  mr={5}
                 />
               </Button>
               <Button
-                onClick={() => {
-                  removeColumn(node.id, col.colName);
-                }}
+                onClick={() => removeColumn(node.id, col.colName)}
                 color="red"
-                variant="light"
+                variant="filled"
                 px={4}
+                radius="0"
               >
-                <Trash size={20} strokeWidth={2} color="red" />
+                <Trash size={20} strokeWidth={2} color="white" />
               </Button>
             </Flex>
           );
         })}
         <Button
-          onClick={() => {
-            addColumn(node.id);
-          }}
+          onClick={() => addColumn(node.id)}
+          color="green"
+          variant="outline"
+          style={{ border: 0, borderRadius: 0, width: '100%' }}
         >
           Add Column
         </Button>

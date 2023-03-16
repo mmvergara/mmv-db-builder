@@ -62,6 +62,7 @@ function FlowPage() {
 
   const [relations, setRelations] = useState<RelationType[]>([
     {
+      relationId: 'yoyoyo',
       sourceTable: 'xx-vendors',
       sourceKey: 'xx-vendors-11-id',
       targetTable: 'xx-vendor_contacts',
@@ -78,20 +79,14 @@ function FlowPage() {
     });
   };
 
-  const removeRelation = (relation: RelationType) => {
-    setRelations((lastRelations) => {
-      return lastRelations.filter(
-        (r) =>
-          r.sourceTable !== relation.sourceTable ||
-          r.sourceKey !== relation.sourceKey ||
-          r.targetTable !== relation.targetTable ||
-          r.targetKey !== relation.targetKey
-      );
-    });
-  };
-
   const addRelation = (relation: RelationType) => {
     setRelations((lastRelations) => [...lastRelations, relation]);
+  };
+
+  const removeRelation = (relationId: string) => {
+    setRelations((lastRelations) => {
+      return lastRelations.filter((r) => r.relationId !== relationId);
+    });
   };
 
   const updateTableName = (nodeId: string, newTableName: string) => {

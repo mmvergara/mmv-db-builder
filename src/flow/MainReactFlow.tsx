@@ -8,7 +8,6 @@ import {
   OnMove,
   Position,
   ReactFlow,
-  Viewport,
   XYPosition,
 } from 'reactflow';
 import { nodePosition, RelationType, TableNodeType } from 'types/types';
