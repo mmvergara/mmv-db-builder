@@ -14,6 +14,18 @@ export default function App() {
     <MantineProvider
       theme={{
         colors: {
+          cyanGreen: [
+            '#E6F8F3',
+            '#C1EDE3',
+            '#98E1D2',
+            '#6FD4C2',
+            '#4CC7B4',
+            '#00B5A5',
+            '#009E92',
+            '#00867F',
+            '#006D6C',
+            '#004F52',
+          ],
           'ocean-blue': [
             '#7AD1DD',
             '#5FCCDB',
