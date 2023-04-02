@@ -1,5 +1,5 @@
 import { Node } from 'reactflow';
-import { CustomEdge, CustomNode, MarkerType, Relation } from 'types/types';
+import { CustomEdge, CustomNode, MarkerType, RelationType } from 'types/types';
 import uniqid from 'uniqid';
 
 export const calculateSourcePosition = (
@@ -30,7 +30,7 @@ export const calculateTargetPosition = (
 };
 
 const determineMarkers = (
-  relation: Relation
+  relation: RelationType
 ): {
   markerStart: MarkerType;
   markerEnd: MarkerType;
@@ -67,10 +67,10 @@ const determineMarkers = (
 
 export const calculateEdges = (
   nodes: Node<CustomNode>[],
-  relations: Relation[]
+  relations: RelationType[]
 ): CustomEdge[] => {
   const initialEdges: CustomEdge[] = [];
-  relations.forEach((relation: Relation) => {
+  relations.forEach((relation: RelationType) => {
     const sourceNode = nodes.find(
       (node: Node<CustomNode>) => node.id === relation.sourceTable
     );
