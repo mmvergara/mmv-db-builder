@@ -4,6 +4,7 @@ import './App.css';
 import './styles.ts';
 import 'reactflow/dist/style.css';
 import FlowPage from 'flow/ReFlowPage';
+import { Notifications } from '@mantine/notifications';
 
 function HomePage() {
   return <FlowPage />;
@@ -41,6 +42,7 @@ export default function App() {
         },
       }}
     >
+      <Notifications />
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />
