@@ -6,6 +6,7 @@ import {
   Button,
   Checkbox,
   Collapse,
+  Divider,
   Flex,
   Modal,
   Text,
@@ -71,7 +72,8 @@ function DrawerTable({
           <DotsVertical size={30} strokeWidth={2} color="white" />
         </Button>
         <Modal opened={modalOpened} onClose={modalClose}>
-          <Box p={4}>
+          <Box p={4} sx={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <Text>Edit Table </Text>
             <TextInput
               value={newTableName}
               onChange={(e) => {
@@ -80,19 +82,21 @@ function DrawerTable({
             />
             <Button
               onClick={() => {
-                removeTable(node.id);
-                modalClose();
-              }}
-            >
-              Delete Table
-            </Button>
-            <Button
-              onClick={() => {
                 updateTableName(node.id, newTableName);
                 modalClose();
               }}
             >
               Update Table Name
+            </Button>
+            <Divider my={2} />
+            <Button
+              color="red"
+              onClick={() => {
+                removeTable(node.id);
+                modalClose();
+              }}
+            >
+              Delete Table
             </Button>
           </Box>
         </Modal>
