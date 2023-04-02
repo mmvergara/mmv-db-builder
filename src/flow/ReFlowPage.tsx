@@ -6,6 +6,7 @@ import Markers from 'components/Markers';
 import { useState } from 'react';
 import { XYPosition } from 'reactflow';
 import { nodePosition, RelationType, TableNodeType } from 'types/types';
+import RelationModal from 'components/FlowPage/RelationModal';
 import MainReactFlow from './MainReactFlow';
 
 function FlowPage() {
@@ -60,6 +61,10 @@ function FlowPage() {
     },
   ]);
 
+  const [
+    relationModal,
+    { open: relationModalOpen, close: relationModalClose },
+  ] = useDisclosure();
   const [relations, setRelations] = useState<RelationType[]>([
     {
       sourceTable: 'xx-vendors',
@@ -74,6 +79,18 @@ function FlowPage() {
     setRelations((lastRelations) => {
       return lastRelations.filter(
         (r) => r.sourceTable !== nodeId && r.targetTable !== nodeId
+      );
+    });
+  };
+
+  const removeRelationWhenColumnDeleted = (nodeId: string, colName: string) => {
+    setRelations((lastRelations) => {
+      return lastRelations.filter(
+        (r) =>
+          r.sourceTable !== nodeId ||
+          r.sourceKey !== `${nodeId}-${colName}` ||
+          r.targetTable !== nodeId ||
+          r.targetKey !== `${nodeId}-${colName}`
       );
     });
   };
@@ -200,6 +217,7 @@ function FlowPage() {
         return n;
       });
     });
+    removeRelationWhenColumnDeleted(nodeId, colName);
   };
   const addTable = (tableName: string, position?: XYPosition) => {
     setNodes((lastNodes) => {
@@ -252,6 +270,7 @@ function FlowPage() {
     setNodes((lastNodes) => {
       return lastNodes.filter((n) => n.id !== nodeId);
     });
+    removeRelationWhenNodeDeleted(nodeId);
   };
 
   // edges will depend on relations and node defined on FlowPage
@@ -309,8 +328,15 @@ function FlowPage() {
                 });
               }}
             >
-              Create Table
-            </Button>{' '}
+              Add Table
+            </Button>
+            <Button
+              color="ocean-blue"
+              variant="white"
+              onClick={relationModalOpen}
+            >
+              Relations
+            </Button>
             <Button color="red" onClick={drawerClose}>
               <svg
                 width="16"
@@ -342,6 +368,15 @@ function FlowPage() {
             );
           })}
         </Drawer.Body>
+        {relationModal && (
+          <RelationModal
+            relations={relations}
+            tables={nodes.map((n) => n.data)}
+            onRelationAdd={addRelation}
+            onRelationDelete={removeRelation}
+            onClose={relationModalClose}
+          />
+        )}
       </Drawer>
       <MainReactFlow
         relations={relations}
