@@ -49,7 +49,7 @@ export default function RelationArrows({ relationData, fontSize }: Props) {
       path="grid"
       start={`${source_table}.${source_column}`}
       end={`${target_table}.${target_column}`}
-      strokeWidth={fontSize / 2}
+      strokeWidth={fontSize / 6.5}
     />
   );
 }
