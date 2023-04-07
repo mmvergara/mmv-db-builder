@@ -40,8 +40,6 @@ export default function RelationArrows({ relationData, fontSize }: Props) {
     headShape = CrowsFoot;
     tailShape = CrowsFoot;
   }
-  console.log('headShape', headShape);
-  console.log('tailShape', tailShape);
   return (
     <Xarrow
       headShape={headShape}

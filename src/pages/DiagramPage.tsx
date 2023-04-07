@@ -76,7 +76,7 @@ export default function DiagramPage() {
             );
           })}
           {relations.map((relation) => (
-            <RelationArrows relationData={relation} />
+            <RelationArrows relationData={relation} fontSize={fontSize} />
           ))}
         </Box>
       </Xwrapper>
