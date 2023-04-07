@@ -1,32 +1,33 @@
-import Draggable from 'react-draggable';
+import Draggable, { ControlPosition } from 'react-draggable';
 import { Box, Title } from '@mantine/core';
 import { randomId } from 'utilities/helpers';
 import { useXarrow } from 'react-xarrows';
+import { TableData } from 'utilities/types/dbTypes';
+import useLocalStorage from 'utilities/hooks/useLocalStorage';
 import TableColumn from './TableColumn';
 
-type props = {
-  name: string;
-};
-
-export default function DraggableTable({ name }: props) {
-  const columns = [
-    {
-      columnName: 'yoyo',
-      columnType: 'varchaar',
-      columnIsKey: true,
-    },
-
-    {
-      columnName: 'yoyo',
-      columnType: 'varchar',
-      columnIsKey: true,
-    },
-  ];
+export default function DraggableTable(
+  table: TableData & { fontSize: number }
+) {
+  const { tableName, columns, fontSize } = table;
   const updateXarrow = useXarrow();
+  const className = randomId(tableName);
 
-  const className = randomId(name);
+  const { s: position, sS: setPosition } = useLocalStorage<ControlPosition>(
+    `${tableName}-position`,
+    { x: 0, y: 0 }
+  );
+
   return (
-    <Draggable onDrag={updateXarrow} handle={`.${className}`} bounds="parent">
+    <Draggable
+      onDrag={updateXarrow}
+      onStop={(_, { x, y }) => {
+        setPosition({ x, y });
+      }}
+      handle={`.${className}`}
+      bounds="parent"
+      defaultPosition={position}
+    >
       <Box
         className={className}
         sx={{
@@ -39,12 +40,22 @@ export default function DraggableTable({ name }: props) {
       >
         <Title
           order={5}
-          sx={{ backgroundColor: '#ebf4ff', padding: '4px 10px' }}
+          sx={{
+            backgroundColor: '#ebf4ff',
+            padding: '4px 10px',
+            fontSize,
+          }}
         >
-          {name}
+          {tableName}
         </Title>
         {columns.map((column) => {
-          return <TableColumn columnData={column} tableName={name} />;
+          return (
+            <TableColumn
+              columnData={column}
+              tableName={tableName}
+              fontSize={fontSize}
+            />
+          );
         })}
       </Box>
     </Draggable>
