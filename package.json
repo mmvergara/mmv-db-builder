@@ -95,6 +95,7 @@
     }
   },
   "dependencies": {
+    "@dbml/core": "^2.5.2",
     "@emotion/react": "^11.10.6",
     "@mantine/core": "^6.0.6",
     "@mantine/hooks": "^6.0.6",
