@@ -28,8 +28,8 @@ export default function RelationArrows({ relationData, fontSize }: Props) {
   let showHead = true;
   let showTail = true;
   if (relation === 'one-to-one') {
-    headShape = 'arrow1';
-    tailShape = 'arrow1';
+    showHead = false;
+    showTail = false;
   } else if (relation === 'one-to-many') {
     headShape = CrowsFoot;
     showTail = false;

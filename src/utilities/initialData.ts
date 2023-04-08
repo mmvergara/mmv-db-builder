@@ -1,3 +1,5 @@
+import { Parser } from '@dbml/core';
+import { parsedDbmlToTableData } from './parsers';
 import { Relations } from './types/dbTypes';
 
 export const initialRelations: Relations[] = [
@@ -13,14 +15,14 @@ export const initialRelations: Relations[] = [
 export const initialTablesDBML = () => {
   if (!window.localStorage.getItem('players-position')) {
     window.localStorage.setItem(
-      'teams-position',
+      'players-position',
       JSON.stringify({ x: 641, y: 114 })
     );
   }
 
   if (!window.localStorage.getItem('teams-position')) {
     window.localStorage.setItem(
-      'players-position',
+      'teams-position',
       JSON.stringify({ x: 268, y: 231 })
     );
   }
@@ -36,6 +38,10 @@ export const initialTablesDBML = () => {
   }
 `;
 };
+
+export const initialTableData = parsedDbmlToTableData(
+  Parser.parse(initialTablesDBML(), 'dbml')
+);
 
 // export const initialTables = [
 //   {

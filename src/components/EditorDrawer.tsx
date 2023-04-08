@@ -1,8 +1,15 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-props-no-spreading */
-import { Box, Drawer, Button, DrawerProps, Alert } from '@mantine/core';
+import {
+  Box,
+  Drawer,
+  Button,
+  DrawerProps,
+  Alert,
+  ColorSchemeProvider,
+} from '@mantine/core';
 import { Relations, TableData } from 'utilities/types/dbTypes';
-import { useState, useRef } from 'react';
+import { useState, useRef, Dispatch, SetStateAction } from 'react';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-sql';
 import 'ace-builds/src-noconflict/theme-one_dark';
@@ -12,11 +19,13 @@ import {
 } from 'utilities/parsers';
 import { showNotification } from '@mantine/notifications';
 import { initialTablesDBML } from 'utilities/initialData';
+import { useDisclosure } from '@mantine/hooks';
+import RelationsModal from './RelationsModal';
 
 export default function EditorDrawer(
   props: DrawerProps & {
     onTableUpdate: (Data: TableData[]) => void;
-    onRelationsUpdate: (data: Relations[]) => void;
+    onRelationsUpdate: Dispatch<SetStateAction<Relations[]>>;
   }
 ) {
   const { onTableUpdate, onRelationsUpdate, onClose, ...DrawerPassedProps } =
@@ -38,13 +47,16 @@ export default function EditorDrawer(
 
       const { data, error: err } = editorValToDMBLObject(value);
       if (err) {
-        setError(error);
+        console.log('set error');
+        setError(err);
         return;
       }
-
       try {
         if (!data) throw new Error('No data');
-        if (data) onTableUpdate(parsedDbmlToTableData(data));
+        if (data) {
+          const newTables: TableData[] = parsedDbmlToTableData(data);
+          onTableUpdate(newTables);
+        }
       } catch {
         showNotification({
           title: 'Error',
@@ -54,6 +66,11 @@ export default function EditorDrawer(
       }
     }, 1000);
   };
+
+  const [
+    relationModalIsOpen,
+    { open: relationModalOpen, close: relationModalClose },
+  ] = useDisclosure();
 
   return (
     <Drawer
@@ -82,7 +99,7 @@ export default function EditorDrawer(
         }}
       >
         <Box sx={{ display: 'flex', gap: 10 }}>
-          <Button color="teal" sx={{ flexGrow: 3 }}>
+          <Button color="teal" onClick={relationModalOpen} sx={{ flexGrow: 3 }}>
             Edit Relations
           </Button>{' '}
           <Button color="red" onClick={onClose} sx={{ flexGrow: 1 }}>
@@ -105,6 +122,12 @@ export default function EditorDrawer(
           fontSize={18}
         />
       </Box>
+      <RelationsModal
+        onClose={relationModalClose}
+        opened={relationModalIsOpen}
+        editorValue={editorValue}
+        onRelationsUpdate={onRelationsUpdate}
+      />
     </Drawer>
   );
 }
