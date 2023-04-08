@@ -3,15 +3,17 @@ import DraggableTable from 'components/DraggableTable';
 import { Xwrapper } from 'react-xarrows';
 import { Relations, TableData } from 'utilities/types/dbTypes';
 import RelationArrows from 'components/RelationArrows';
-import { initialRelations, initialTables } from 'utilities/initialData';
+import { initialRelations, initialTablesDBML } from 'utilities/initialData';
 import useLocalStorage from 'utilities/hooks/useLocalStorage';
 import { useDisclosure } from '@mantine/hooks';
-import EditorModal from 'components/EditorModal';
+import EditorModal from 'components/EditorDrawer';
+import { parsedDbmlToTableData } from 'utilities/parsers';
+import { Parser } from '@dbml/core';
 
 export default function DiagramPage() {
   const { s: tables, sS: setTables } = useLocalStorage<TableData[]>(
     'tables',
-    initialTables
+    parsedDbmlToTableData(Parser.parse(initialTablesDBML(), 'dbml'))
   );
   const { s: relations, sS: setRelations } = useLocalStorage<Relations[]>(
     'relations',
@@ -19,20 +21,25 @@ export default function DiagramPage() {
   );
   const { s: fontSize, sS: setFontSize } = useLocalStorage<number>(
     'fontSize',
-    10
+    16
   );
+
   const [editorIsOpen, { open: editorOpen, close: editorClose }] =
     useDisclosure(false);
+
   const handleTableUpdate = (data: TableData[]) => setTables(data);
+  const handleRelationsUpdate = (data: Relations[]) => setRelations(data);
+
   return (
     <>
       <EditorModal
         opened={editorIsOpen}
-        onTableUpdate={handleTableUpdate}
         onClose={editorClose}
+        onTableUpdate={handleTableUpdate}
+        onRelationsUpdate={handleRelationsUpdate}
       />
       <Box>
-        <Box sx={{ width: '100%', backgroundColor: 'red', padding: 10 }}>
+        <Box sx={{ width: '100%', backgroundColor: '#282c34', padding: 10 }}>
           <Button onClick={editorOpen}>Show Editor</Button>
           <NumberInput
             defaultValue={fontSize}
