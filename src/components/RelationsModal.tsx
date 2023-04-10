@@ -95,9 +95,7 @@ export default function RelationsModal(props: Props) {
 
   const handleDeleteRelation = (relationToDel: Relations) => {
     let newRelations: Relations[] = [];
-    console.log('relationToDel', relationToDel);
     setRelations((prev) => {
-      console.log('prev', prev);
       newRelations = prev.filter((r) => {
         return !(
           r.relation === relationToDel.relation &&
