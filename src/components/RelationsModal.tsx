@@ -9,7 +9,6 @@ import {
   Title,
   Select,
   Box,
-  Paper,
   Divider,
   SegmentedControl,
   Text,
@@ -18,35 +17,21 @@ import {
 import { showNotification } from '@mantine/notifications';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { randomId } from 'utilities/helpers';
-import useLocalStorage from 'utilities/hooks/useLocalStorage';
-import {
-  initialRelations,
-  initialTableData,
-  initialTablesDBML,
-} from 'utilities/initialData';
 import {
   editorValToDMBLObject,
-  parsedDbmlToTableData,
   relationDataToDMBLRelation,
 } from 'utilities/parsers';
 import { Relations, TableData } from 'utilities/types/dbTypes';
 
 type Props = ModalProps & {
-  onRelationsUpdate: Dispatch<SetStateAction<Relations[]>>;
+  setRelations: Dispatch<SetStateAction<Relations[]>>;
   editorValue: string;
+  relations: Relations[];
   tables: TableData[];
 };
 
 export default function RelationsModal(props: Props) {
-  const { onRelationsUpdate, editorValue, tables, ...modalProps } = props;
-  // const { s: tables, sS: setTables } = useLocalStorage<TableData[]>(
-  //   'tables',
-  //   initialTableData
-  // );
-  const { s: relations, sS: setRelations } = useLocalStorage<Relations[]>(
-    'relations',
-    initialRelations
-  );
+  const { setRelations, editorValue, tables, relations, ...modalProps } = props;
   const [relationType, setRelationType] =
     useState<Relations['relation']>('one-to-one');
   const [source_table, setSourceTable] = useState<string>('');
@@ -93,10 +78,7 @@ export default function RelationsModal(props: Props) {
     [...relations, CustomNewRelation].forEach((r) => {
       dmblRelationsString += `Ref: ${relationDataToDMBLRelation(r)}\n`;
     });
-    console.log(dmblRelationsString);
-    const { data, error } = editorValToDMBLObject(
-      editorValue + dmblRelationsString
-    );
+    const { error } = editorValToDMBLObject(editorValue + dmblRelationsString);
     if (error) {
       showNotification({
         message: error.split('-')[1].trim(),
@@ -104,12 +86,7 @@ export default function RelationsModal(props: Props) {
       });
       return;
     }
-    let newRelationsAdded: Relations[] = [];
-    onRelationsUpdate((prev) => {
-      newRelationsAdded = prev.concat(CustomNewRelation);
-      return newRelationsAdded;
-    });
-    setRelations(newRelationsAdded);
+    setRelations((p) => [...p, CustomNewRelation]);
     showNotification({
       message: 'Relation Added',
       color: 'green',
@@ -118,20 +95,20 @@ export default function RelationsModal(props: Props) {
 
   const handleDeleteRelation = (relationToDel: Relations) => {
     let newRelations: Relations[] = [];
-    onRelationsUpdate((prev) => {
+    console.log('relationToDel', relationToDel);
+    setRelations((prev) => {
+      console.log('prev', prev);
       newRelations = prev.filter((r) => {
-        return (
-          r.relation !== relationToDel.relation &&
-          r.source_table !== relationToDel.source_table &&
-          r.source_column !== relationToDel.source_column &&
-          r.target_table !== relationToDel.target_table &&
-          r.target_column !== relationToDel.target_column
+        return !(
+          r.relation === relationToDel.relation &&
+          r.source_table === relationToDel.source_table &&
+          r.source_column === relationToDel.source_column &&
+          r.target_table === relationToDel.target_table &&
+          r.target_column === relationToDel.target_column
         );
       });
-      console.log(newRelations);
       return newRelations;
     });
-    setRelations(newRelations);
     showNotification({
       message: 'Relation Deleted',
       color: 'green',
