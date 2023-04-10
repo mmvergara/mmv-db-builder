@@ -6,7 +6,7 @@ import { Notifications } from '@mantine/notifications';
 export default function App() {
   return (
     <Router>
-      <Notifications />
+      <Notifications position="top-right" zIndex={2077} />
       <Routes>
         <Route path="/" element={<DiagramPage />} />
       </Routes>
